@@ -1,0 +1,17 @@
+{
+  "protocol_version": 1,
+  "agent": "remoteview-android-lab-agent",
+  "capabilities": [
+    "device.info",
+    "device.status",
+    "network.info",
+    "session.status",
+    "agent.ping"
+  ],
+  "security": {
+    "requires_active_session": true,
+    "requires_enrollment": true,
+    "reject_unknown_operations": true,
+    "allow_arbitrary_shell": false
+  }
+}
