@@ -13,7 +13,8 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "0.2.0"
-        buildConfigField("String", "CONTROL_PLANE_URL", "\"https://127.0.0.1\"")
+        val controlPlaneUrl = project.findProperty("CONTROL_PLANE_URL")?.toString() ?: "https://example.invalid"
+        buildConfigField("String", "CONTROL_PLANE_URL", "\"$controlPlaneUrl\"")
     }
     buildFeatures { buildConfig = true }
 }
