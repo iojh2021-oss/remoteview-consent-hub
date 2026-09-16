@@ -4,7 +4,10 @@ services:
     container_name: remoteview-api
     restart: unless-stopped
     environment:
-      DATABASE_URL: postgresql://remoteview:change-me@db:5432/remoteview
+      DATABASE_URL: postgresql://${POSTGRES_USER:-remoteview}:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-remoteview}
+      ENROLLMENT_CODE: ${ENROLLMENT_CODE:?set ENROLLMENT_CODE}
+      ADMIN_API_KEY: ${ADMIN_API_KEY:?set ADMIN_API_KEY}
+      SESSION_MINUTES: ${SESSION_MINUTES:-30}
     ports:
       - "127.0.0.1:8000:8000"
     depends_on:
@@ -16,13 +19,13 @@ services:
     container_name: remoteview-db
     restart: unless-stopped
     environment:
-      POSTGRES_DB: remoteview
-      POSTGRES_USER: remoteview
-      POSTGRES_PASSWORD: change-me
+      POSTGRES_DB: ${POSTGRES_DB:-remoteview}
+      POSTGRES_USER: ${POSTGRES_USER:-remoteview}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U remoteview -d remoteview"]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 5s
       timeout: 5s
       retries: 10
