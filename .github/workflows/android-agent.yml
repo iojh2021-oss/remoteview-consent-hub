@@ -1,0 +1,27 @@
+name: Android Agent Build
+
+on:
+  push:
+    paths:
+      - 'android-agent/**'
+      - '.github/workflows/android-agent.yml'
+  pull_request:
+    paths:
+      - 'android-agent/**'
+      - '.github/workflows/android-agent.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+      - name: Build debug APK
+        working-directory: android-agent
+        run: gradle --no-daemon assembleDebug -PCONTROL_PLANE_URL=https://example.invalid
